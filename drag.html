@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			.left,
+			.right {
+				/*非static属性*/
+				position: relative;
+				height: 2000px;
+				float: left;
+				width: 500px;
+				border: 1px dashed #3385FF;
+				margin: 15px;
+				-webkit-user-select: none;
+				-moz-user-select: none;
+				-ms-user-select: none;
+			}
+			
+			img {
+				width: 113px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<input type="button" id="ipt" value="移动图片" />
+		<div class="left">
+			<img src="img/1.jpg" alt="" />
+			<img src="img/2.jpg" alt="" />
+			<img src="img/3.jpg" alt="" />
+			<img src="img/4.jpg" alt="" />
+			<img src="img/5.jpg" alt="" />
+			<img src="img/6.jpg" alt="" />
+			<img src="img/10.jpg" alt="" />
+			<img src="img/11.jpg" alt="" />
+			<img src="img/12.jpg" alt="" />
+			<img src="img/13.jpg" alt="" />
+			<img src="img/14.jpg" alt="" />
+			<img src="img/15.jpg" alt="" />
+			<img src="img/16.jpg" alt="" />
+			<img src="img/17.jpg" alt="" />
+			<img src="img/18.jpg" alt="" />
+			<img src="img/19.jpg" alt="" />
+			<img src="img/20.jpg" alt="" />
+			<img src="img/21.jpg" alt="" />
+			<img src="img/22.jpg" alt="" />
+			<img src="img/23.jpg" alt="" />
+			<img src="img/24.jpg" alt="" />
+			<img src="img/25.jpg" alt="" />
+			<img src="img/26.jpg" alt="" />
+			<img src="img/27.jpg" alt="" />
+			<img src="img/28.jpg" alt="" />
+			<img src="img/29.jpg" alt="" />
+			<img src="img/30.jpg" alt="" />
+			<img src="img/31.jpg" alt="" />
+			<img src="img/32.jpg" alt="" />
+			<img src="img/33.jpg" alt="" />
+			<img src="img/34.jpg" alt="" />
+			<img src="img/35.jpg" alt="" />
+			<img src="img/36.jpg" alt="" />
+			<img src="img/37.jpg" alt="" />
+			<img src="img/38.jpg" alt="" />
+			<img src="img/39.jpg" alt="" />
+			<img src="img/40.jpg" alt="" />
+			<img src="img/41.jpg" alt="" />
+			<img src="img/42.jpg" alt="" />
+			<img src="img/43.jpg" alt="" />
+			<img src="img/44.jpg" alt="" />
+			<img src="img/45.jpg" alt="" />
+			<img src="img/46.jpg" alt="" />
+			<img src="img/47.jpg" alt="" />
+			<img src="img/48.jpg" alt="" />
+			<img src="img/49.jpg" alt="" />
+			<img src="img/50.jpg" alt="" />
+			<img src="img/51.jpg" alt="" />
+			<img src="img/52.jpg" alt="" />
+			<img src="img/53.jpg" alt="" />
+			<img src="img/54.jpg" alt="" />
+			<img src="img/55.jpg" alt="" />
+			<img src="img/56.jpg" alt="" />
+			<img src="img/57.jpg" alt="" />
+			<img src="img/58.jpg" alt="" />
+			<img src="img/59.jpg" alt="" />
+			<img src="img/60.jpg" alt="" />
+			<img src="img/61.jpg" alt="" />
+			<img src="img/62.jpg" alt="" />
+			<img src="img/63.jpg" alt="" />
+			<img src="img/64.jpg" alt="" />
+			<img src="img/65.jpg" alt="" />
+			<img src="img/66.jpg" alt="" />
+		</div>
+		<div class="right"></div>
+		<script>
+			/*
+			 * 拖拽
+			 *  drag
+			 * 	dragstart
+			 * 	dragover
+			 * 
+			 * 	draggable="true"
+			 * 
+			 *  drop
+			 * 
+			 * */
+			onload = function() {
+				//获取左侧容器
+				var lDiv = document.getElementsByClassName("left")[0];
+				//获取左侧的所有图片
+				var imgs = document.getElementsByClassName("left")[0].getElementsByTagName("img");
+				//获取右侧容器
+				var rDiv = document.getElementsByClassName("right")[0];
+				//全局变量, 保存触发拖拽事件的对象
+				var imgMove;
+				// null == undefined ? 
+				document.getElementById("ipt").onclick = function() {
+					//将左侧图片添加到右侧
+					rDiv.appendChild(imgs[0]);
+				};
+				//绑定拖拽开始事件
+				lDiv.ondragstart = function(e) {
+					var img = e.target;
+					//存放图片
+					imgMove = img;
+				};
+				rDiv.ondragover = function(e) {
+					//默认浏览器会阻止用户将任何元素拖拽或放置到其他容器中
+					//阻止浏览器默认行为
+					e.preventDefault();
+				};
+				/*
+				 * 	瀑布流
+				 * 		1. 初始化数据
+				 * 			图片宽、容器可以放几列图片
+				 * 			存放高度的数组, 存放left的数组
+				 * 
+				 * 		2. 布局
+				 * 			每次将图片放入最矮的列
+				 * 			获取数组中最小的值 与序(列)号
+				 * 			
+				 * 
+				 * */
+				//初始化
+				//初始化列
+				var cols = 4;
+				//初始化高
+				//自执行函数 / 自调用匿名函数
+				var arrHeight = (function() {
+					var arr = [];
+					for (var i = 0; i < cols; i++) {
+						arr.push(0);
+					}
+					return arr;
+				})();
+				//初始化left
+				var arrLeft = (function() {
+					var arr = [];
+					for (var i = 0; i < cols; i++) {
+						arr.push(113 * i);
+					}
+					return arr;
+				})();
+				rDiv.ondrop = function() {
+					//设置图片的定位属性
+					imgMove.style.position = "absolute";
+					//设置top 和left
+					//获取最矮的 列
+					var minObj = getMin(arrHeight);
+					imgMove.style.top = minObj.minHeight + "px";
+					imgMove.style.left = arrLeft[minObj.minIndex] + "px";
+					//更新最矮的列数据  arrHeight
+					arrHeight[minObj.minIndex] += imgMove.offsetHeight;
+					rDiv.appendChild(imgMove);
+					/**
+					 * 	设置第一次top left
+					 * 		找到鼠标位置
+					 * 			事件对象.pageX/Y
+					 * 
+					 * 	setTimeout(
+					 * 		第二次设置 top left
+					 * 			瀑布流实际位置
+					 *      , 1 );
+					 * 
+					 *	 css
+					 * 		transition: all 1s;
+					 * 
+					 */
+					imgMove = null;
+				}
+				/**
+				 * 获取数组中的最小值 与 最小序号
+				 * 
+				 * @param {Array} arr
+				 * @return {Object} 
+				 */
+				function getMin(arr) {
+					var minIndex = 0;
+					//Math.min.apply()
+					var minHeight = arr[0];
+					//遍历数组找到最小值
+					arr.map(function(d, i) {
+						if(d < minHeight){
+							minHeight = d;
+							minIndex = i;
+						}
+					})
+					return {
+						minIndex : minIndex,
+						minHeight : minHeight
+					};
+				}
+			};
+		</script>
+	</body>
+
+</html>
